@@ -17,11 +17,19 @@ Includes **user-set governance**: `max_capital_fraction` (cap on deployed
 capital) and `bail_out_drawdown_pct` (kill-switch). User controls how much the
 AI trades and when it bails.
 
-## ▢ Step 2 — Pattern detection engine
-Deterministic candlestick patterns (engulfing, doji, hammer, star, etc.) from
-OHLC math. Honest historical follow-through stats per pattern per asset. This
-is the "master at reading candles" piece — reliable at *identifying*, honest
-about *predicting*.
+## ✅ Step 2 — Pattern detection engine
+`backend/engine/patterns/` — deterministic detectors for 8 candlestick patterns
+(doji, hammer, shooting star, marubozu, bullish/bearish engulfing, morning/
+evening star) from OHLC geometry, plus **honest follow-through stats** that
+measure what each pattern actually did historically (often weaker than the
+folklore). Sample-size guardrails flag thin results. `demo_patterns.py`.
+**34 tests passing** (20 engine + 14 pattern). Did not touch Step 1 code.
+
+## ✅ Step 2.5 — Landing page (frontend foundation)
+`frontend/` — Next.js + TS + Tailwind. Public landing page for **Veridian**.
+Signature element: real backtest results (one win, one loss) pulled from the
+engine. Establishes the design system (palette, type, components) the app
+screens will reuse. Type-checks clean.
 
 ## ▢ Step 3 — FastAPI layer
 Expose the engine over HTTP: run backtests, list strategies, fetch bars +
