@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Type: IBM Plex family — Mono for instrument-like data, Sans for prose.
+   A deliberate pairing for a trading tool: numbers read like terminal output. */
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap");
+
+:root {
+  --font-sans: "IBM Plex Sans";
+  --font-mono: "IBM Plex Mono";
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #0e1518;
+  color: #e8e6dd;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Subtle grid texture — like graph paper under a chart, very faint. */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(35, 48, 47, 0.35) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(35, 48, 47, 0.35) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Visible keyboard focus everywhere. */
+:focus-visible {
+  outline: 2px solid #e0a84e;
+  outline-offset: 2px;
+}
