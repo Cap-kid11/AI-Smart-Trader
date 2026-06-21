@@ -43,6 +43,15 @@ response. **47 tests passing** (13 new API tests via TestClient). Run with
 Charting (lightweight-charts), strategy builder, risk/governance controls,
 backtest results dashboard. Kidus's stack: Next.js + TS + Tailwind.
 
+## ✅ Step 4 — Dashboard frontend
+`frontend/app/dashboard/` — the backtest console. Typed API client
+(`lib/api.ts`) calls the FastAPI backend. Users pick symbol + strategy, set
+risk limits (capital per trade, stop, max capital, bail-out) via sliders, run
+a backtest, and see a live equity chart (`EquityChart` with hover), honest
+metrics grid, the disclaimer, and the full trade table. Reuses the landing
+page's design system. Type-clean. Graceful "is the backend running?" error
+state.
+
 ## ▢ Step 5 — Annotation store ("teach the AI")
 Users tag candles/zones; stored with full OHLCV + indicator context. Builds a
 per-user personalized pattern library.
