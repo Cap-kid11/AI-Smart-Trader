@@ -31,9 +31,13 @@ Signature element: real backtest results (one win, one loss) pulled from the
 engine. Establishes the design system (palette, type, components) the app
 screens will reuse. Type-checks clean.
 
-## ▢ Step 3 — FastAPI layer
-Expose the engine over HTTP: run backtests, list strategies, fetch bars +
-detected patterns. The contract the frontend consumes.
+## ✅ Step 3 — FastAPI layer
+`backend/api/` — HTTP surface over the whole engine: `/health`, `/symbols`,
+`/strategies`, `/bars/{symbol}`, `POST /backtest`, `/patterns/{symbol}`.
+Pydantic schemas define the contract; a service layer adapts engine → API
+without touching the engine. Honest `disclaimer` field on every analytical
+response. **47 tests passing** (13 new API tests via TestClient). Run with
+`uvicorn api.main:app --reload`; docs at `/docs`.
 
 ## ▢ Step 4 — Next.js frontend
 Charting (lightweight-charts), strategy builder, risk/governance controls,
