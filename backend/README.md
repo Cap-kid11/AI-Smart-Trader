@@ -29,9 +29,11 @@ backend/
 │   ├── risk/          # position sizing + stop logic
 │   ├── patterns/      # candlestick detection + honest follow-through stats
 │   └── backtest/      # the simulation engine + honest metrics
+├── api/               # FastAPI layer exposing the engine over HTTP
 ├── data_samples/      # seeded sample OHLCV (reproducible, no API key)
 ├── tests/             # pytest suite
-├── demo.py            # end-to-end example
+├── demo.py            # backtest example
+├── demo_patterns.py   # pattern-reading example
 └── generate_sample_data.py
 ```
 
@@ -81,6 +83,30 @@ risk = RiskConfig(
 
 When the bail-out triggers, the engine stops opening **new** positions; open
 positions still close normally by signal or stop.
+
+## The HTTP API
+
+The FastAPI layer (`api/`) exposes the whole engine for the frontend:
+
+```bash
+cd backend
+uvicorn api.main:app --reload     # http://localhost:8000
+# interactive docs at http://localhost:8000/docs
+```
+
+| Method | Route | Purpose |
+|---|---|---|
+| GET | `/health` | service check |
+| GET | `/symbols` | available sample symbols |
+| GET | `/strategies` | preset strategies + descriptions |
+| GET | `/bars/{symbol}` | OHLCV bars (for charting) |
+| POST | `/backtest` | run a strategy, get honest metrics + equity curve + trades |
+| GET | `/patterns/{symbol}` | detected candlestick patterns + honest follow-through stats |
+
+Every analytical response carries a `disclaimer` field — honest framing is part
+of the contract, not optional. `profit_factor` is clamped (inf → 999) for JSON
+safety. CORS is open to `http://localhost:3000` (the Next.js dev server);
+tighten for production.
 
 ## Reading candles (pattern engine)
 
