@@ -71,6 +71,22 @@ Mix of pre-written lesson content (fundamentals) + live model API calls
 
 ---
 
+## ✅ Step 6 — AI tutor
+Backend: `engine/tutor/` — pre-written lessons for 8 patterns + concepts
+(`lessons.py`), live coaching via Anthropic API (`coach.py`) with an honest,
+no-advice system prompt, and a service that assembles real context (detected
+patterns, honest follow-through, user vocabulary) and falls back to lessons
+when no `ANTHROPIC_API_KEY` is set. API: `GET /tutor/lessons`,
+`POST /tutor/ask`. Frontend: `app/learn/` — coaching chat (labels each answer
+live vs lesson) + expandable lessons library. All four screens now
+cross-linked. **59 tests passing** (5 new tutor tests, fallback-path). Key is
+server-side only, never exposed to frontend.
+
+### 3-stage autonomy — now realized
+1. AI trades chosen strategy → dashboard + risk controls (Steps 1,4)
+2. AI + user co-pilot → tutor coaches on real data + user's annotations (Steps 5,6)
+3. User trades alone → tutor is built to teach independence, not dependence
+
 ## Resume notes for the next session / Cursor
 - Run `cd backend && python -m pytest -q` to confirm the engine is green.
 - Run `python demo.py` to see it work end to end.
