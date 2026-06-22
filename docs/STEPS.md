@@ -110,9 +110,13 @@ every response. **69 tests passing** (10 new). Realizes autonomy Stage 1.
    paper store, and tutor all use the provider — zero engine changes proved the
    interface design. `/symbols` reports the active provider; dashboard shows a
    LIVE/SAMPLE badge. 86 tests passing (6 new). Needs free Alpaca keys to go live.
-4. ▢ Deploy live — public URL (Vercel for frontend, Fly.io/Railway/Render for
-   API + Postgres); the resume-ready, shareable version. NOTE: freelance angle —
-   set up demo-ready for showing clients.
+4. ✅ Deploy live — production config complete: backend `Dockerfile` +
+   `railway.json` + `render.yaml` (with one-click Postgres), frontend
+   `vercel.json`. CORS origins now env-configurable (`CORS_ORIGINS`); db layer
+   normalizes `postgres://`→`postgresql+psycopg://` and psycopg added. Full
+   step-by-step in `docs/DEPLOYMENT.md`. 86 tests passing. Actual deploy clicks
+   are the owner's (accounts/credentials). NOTE: freelance — the live URL is the
+   client-facing demo.
 
 ## Resume notes for the next session / Cursor
 - Run `cd backend && python -m pytest -q` to confirm the engine is green.
