@@ -87,6 +87,28 @@ server-side only, never exposed to frontend.
 2. AI + user co-pilot → tutor coaches on real data + user's annotations (Steps 5,6)
 3. User trades alone → tutor is built to teach independence, not dependence
 
+## ✅ Step 7 — Paper trading (extension 1 of 4)
+Backend: `engine/paper/` — simulated portfolio (Portfolio/Position/Order
+SQLModel tables on the shared `engine/db.py` engine), buy/sell with cash &
+share guardrails, avg-cost tracking, live-priced holdings, P&L, order history,
+reset. API: `GET /paper/{user}`, `POST /paper/buy|sell`, `/paper/{user}/orders`,
+`/paper/{user}/reset`. Frontend: `app/paper/` — account summary, trade ticket,
+holdings, order history. All 5 screens cross-linked. Honest `disclaimer` on
+every response. **69 tests passing** (10 new). Realizes autonomy Stage 1.
+
+## ▢ Extension plan (one by one)
+1. ✅ Paper trading — simulated portfolio
+2. ✅ Auth + user accounts — `engine/auth/` (bcrypt + JWT, self-contained), API
+   `/auth/signup|login|me` + protected `/me/*` routes, frontend AuthProvider +
+   `/auth` login/signup page + session restore; paper/studio use the logged-in
+   user, fall back to demo-user. 80 tests passing (11 new). Set JWT_SECRET in
+   prod.
+3. ▢ Real market data — implement the Alpaca adapter (already stubbed) behind
+   the existing `DataAdapter` interface; real equities instead of sample CSVs
+4. ▢ Deploy live — public URL (Vercel for frontend, Fly.io/Railway/Render for
+   API + Postgres); the resume-ready, shareable version. NOTE: freelance angle —
+   set up demo-ready for showing clients.
+
 ## Resume notes for the next session / Cursor
 - Run `cd backend && python -m pytest -q` to confirm the engine is green.
 - Run `python demo.py` to see it work end to end.
