@@ -52,9 +52,15 @@ metrics grid, the disclaimer, and the full trade table. Reuses the landing
 page's design system. Type-clean. Graceful "is the backend running?" error
 state.
 
-## ▢ Step 5 — Annotation store ("teach the AI")
-Users tag candles/zones; stored with full OHLCV + indicator context. Builds a
-per-user personalized pattern library.
+## ✅ Step 5 — Annotation store ("teach the AI")
+Backend: `engine/annotations/` — SQLModel/SQLite store. Each tag captures the
+user's label PLUS market context (OHLCV window + RSI/EMA/SMA at that candle),
+turning tags into labeled examples. API routes: `POST /annotations`,
+`GET /annotations/{user_id}`, `DELETE /annotations/{user_id}/{id}`, with a
+per-user vocabulary count. Frontend: `app/studio/` — click a candle on a real
+candlestick chart (`CandleChart`) to label it; amber dots mark labeled candles;
+vocabulary + library views. Owner-scoped deletes. SQLite now → Postgres later by
+changing the URL. **54 tests passing** (7 new annotation tests).
 
 ## ▢ Step 6 — AI tutor
 Mix of pre-written lesson content (fundamentals) + live model API calls
