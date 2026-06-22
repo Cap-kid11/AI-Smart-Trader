@@ -72,6 +72,23 @@ export type PatternsResponse = {
   disclaimer: string;
 };
 
+export type AnnotationOut = {
+  id: number;
+  user_id: string;
+  symbol: string;
+  date: string;
+  label: string;
+  note: string;
+  indicators: Record<string, number | null>;
+  window_size: number;
+  created_at: string;
+};
+
+export type AnnotationList = {
+  annotations: AnnotationOut[];
+  vocabulary: Record<string, number>;
+};
+
 // --- Fetch helpers ---
 
 async function getJSON<T>(path: string): Promise<T> {
@@ -96,6 +113,15 @@ async function postJSON<T>(path: string, body: unknown): Promise<T> {
   return res.json();
 }
 
+async function deleteJSON<T>(path: string): Promise<T> {
+  const res = await fetch(`${API_BASE}${path}`, { method: "DELETE" });
+  if (!res.ok) {
+    const detail = await res.json().catch(() => ({}));
+    throw new ApiError(res.status, detail?.detail ?? res.statusText);
+  }
+  return res.json();
+}
+
 export class ApiError extends Error {
   status: number;
   constructor(status: number, message: string) {
@@ -113,7 +139,7 @@ export const api = {
   strategies: () =>
     getJSON<{ strategies: StrategyInfo[] }>("/strategies"),
   bars: (symbol: string) =>
-    getJSON<{ symbol: string; bars: EquityPoint[] }>(`/bars/${symbol}`),
+    getJSON<{ symbol: string; bars: Bar[] }>(`/bars/${symbol}`),
   backtest: (body: {
     symbol: string;
     strategy_key: string;
@@ -123,4 +149,28 @@ export const api = {
   }) => postJSON<BacktestResponse>("/backtest", body),
   patterns: (symbol: string, horizon = 5) =>
     getJSON<PatternsResponse>(`/patterns/${symbol}?horizon=${horizon}`),
+
+  // Annotations ("teach the AI")
+  createAnnotation: (body: {
+    user_id: string;
+    symbol: string;
+    date: string;
+    label: string;
+    note?: string;
+  }) => postJSON<AnnotationOut>("/annotations", body),
+  listAnnotations: (userId: string, symbol?: string) =>
+    getJSON<AnnotationList>(
+      `/annotations/${userId}${symbol ? `?symbol=${symbol}` : ""}`
+    ),
+  deleteAnnotation: (userId: string, id: number) =>
+    deleteJSON<{ deleted: boolean }>(`/annotations/${userId}/${id}`),
+};
+
+export type Bar = {
+  date: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
 };
