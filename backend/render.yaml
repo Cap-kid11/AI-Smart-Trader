@@ -1,0 +1,25 @@
+# Render.com blueprint — alternative to Railway.
+# Creates the API service and a free Postgres database, wired together.
+services:
+  - type: web
+    name: veridian-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: JWT_SECRET
+        generateValue: true          # Render generates a strong secret
+      - key: CORS_ORIGINS
+        sync: false                  # set to your Vercel URL after frontend deploy
+      - key: DATA_PROVIDER
+        value: csv                   # switch to "alpaca" + add keys to go live
+      - key: VERIDIAN_DB_URL
+        fromDatabase:
+          name: veridian-db
+          property: connectionString
+
+databases:
+  - name: veridian-db
+    plan: free
