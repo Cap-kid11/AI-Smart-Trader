@@ -103,8 +103,13 @@ every response. **69 tests passing** (10 new). Realizes autonomy Stage 1.
    `/auth` login/signup page + session restore; paper/studio use the logged-in
    user, fall back to demo-user. 80 tests passing (11 new). Set JWT_SECRET in
    prod.
-3. ▢ Real market data — implement the Alpaca adapter (already stubbed) behind
-   the existing `DataAdapter` interface; real equities instead of sample CSVs
+3. ✅ Real market data — `AlpacaDataAdapter` implemented (daily bars, disk
+   cache, lazy SDK import) behind the existing `DataAdapter` interface. A
+   provider factory (`engine/data/provider.py`) switches CSV↔Alpaca via
+   `DATA_PROVIDER` env var and falls back to CSV if keys are missing. Services,
+   paper store, and tutor all use the provider — zero engine changes proved the
+   interface design. `/symbols` reports the active provider; dashboard shows a
+   LIVE/SAMPLE badge. 86 tests passing (6 new). Needs free Alpaca keys to go live.
 4. ▢ Deploy live — public URL (Vercel for frontend, Fly.io/Railway/Render for
    API + Postgres); the resume-ready, shareable version. NOTE: freelance angle —
    set up demo-ready for showing clients.
